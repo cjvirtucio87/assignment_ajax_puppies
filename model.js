@@ -12,7 +12,7 @@ APP.Model = (function (_) {
   };
 
   var all = function() {
-    console.log("Attempting GET request..")
+    alert("Attempting GET request..");
     return $.ajax({
       url: _buildURL(),
       type: 'GET',

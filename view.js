@@ -20,7 +20,8 @@ APP.View = (function($,_) {
     promise.then(
       function (data) {
         _.forEach(data, function(item) {
-          _$index.append(["<li class='puppies-index-item'>",item,'</li>'].join(''));
+          var puppy = [item.name," (",item.breed.name,") ","created at ", jQuery.timeago(item.created_at)].join('');
+          _$index.append(["<li class='puppies-index-item'>",puppy,'</li>'].join(''));
         });
         alert("Puppies loaded!");
       },
