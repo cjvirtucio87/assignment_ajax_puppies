@@ -1,6 +1,8 @@
 var APP = APP || {};
 
 APP.View = (function($,_) {
+  var _cachedNewPuppy;
+  var _$selected;
 
   var init = function() {
     _cacheDOM();
@@ -72,16 +74,20 @@ APP.View = (function($,_) {
     };
   };
 
+  var _prependPuppy = function (item) {
+    var _puppy = [item.name," (",item.breed.name,") ","created at ", jQuery.timeago(item.created_at)].join('');
+    // adding adopt button
+    _adopt = [" --- <span><a href='#' class='puppy-adopt' data-puppy-id=\'",item.id,"\'>",'adopt',"</a></span>"].join('');
+    _puppyLI = ["<li class='puppies-index-item'>",_puppy,_adopt,'</li>'].join('');
+    _$index.prepend(_puppyLI);
+  };
+
   var index = function(promise) {
     _waiting();
     promise.then(
       function (data) {
-        _.forEachRight(data, function(item) {
-          var _puppy = [item.name," (",item.breed.name,") ","created at ", jQuery.timeago(item.created_at)].join('');
-          // adding adopt button
-          _adopt = [" --- <span><a href='#' class='puppy-adopt' data-puppy-id=\'",item.id,"\'>",'adopt',"</a></span>"].join('');
-          _puppyLI = ["<li class='puppies-index-item'>",_puppy,_adopt,'</li>'].join('');
-          _$index.append(_puppyLI);
+        _.forEach(data, function(item) {
+          _prependPuppy(item);
         });
         _success();
       },
@@ -91,10 +97,12 @@ APP.View = (function($,_) {
 
   var create = function() {
     _waiting();
-    return {name: _$newName.val(),
-            breed_id: _$breed
-                        .children('option:selected')
-                        .attr('data-breed-id')};
+    _$selected = _$breed.children('option:selected');
+    _cachedNewPuppy = {name: _$newName.val(),
+                       breed: {name: _$selected.text()},
+                       breed_id: _$selected.attr('data-breed-id'),
+                       created_at: new Date()};
+    return { name: _cachedNewPuppy.name, breed_id: _cachedNewPuppy.breed_id };
   };
 
   var destroy = function() {
@@ -104,7 +112,11 @@ APP.View = (function($,_) {
   // Responses for POST requests.
   var createResponse = function(promise) {
     promise.then(
-      _success,
+      function() {
+        _success();
+        _prependPuppy(_cachedNewPuppy);
+        _cachedNewPuppy = null;
+      },
       _failure
     );
   };
