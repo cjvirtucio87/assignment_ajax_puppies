@@ -22,6 +22,18 @@ APP.Model = (function (_) {
     });
   };
 
+  // var create = function(name, breed) {
+  //   return $.ajax({
+  //     url: _buildURL(),
+  //     type: 'POST',
+  //     dataType: 'json',
+  //     data: {
+  //       name: ,
+  //       breed_id:
+  //     }
+  //   });
+  // };
+
   return {
     all: all
   };
