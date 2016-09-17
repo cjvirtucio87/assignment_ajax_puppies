@@ -1,7 +1,11 @@
 var APP = APP || {};
 
 APP.eventHandlers = {
-  loadIndex: function(ev) {
+  getIndex: function(ev) {
     APP.Controller.index();
+  },
+  postCreate: function(ev) {
+    ev.preventDefault();
+    APP.Controller.create();
   }
 };

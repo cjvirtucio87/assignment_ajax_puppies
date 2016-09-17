@@ -4,38 +4,81 @@ var APP = APP || {};
 
 APP.Model = (function (_) {
 
+  // REST
   var BASE_URI = 'https://ajax-puppies.herokuapp.com/';
-  var RESOURCE = 'puppies.json';
+  var PUPPIES = 'puppies.json';
+  var BREEDS = 'breeds.json';
 
-  var _buildURL = function() {
-    return [BASE_URI, RESOURCE].join('');
+  var _buildURL = function(resource) {
+    return [BASE_URI, resource].join('');
+  };
+
+  // Console logging
+  var _initiatingLog = function (request) {
+    console.log(['Initiating ', request, '...'].join(''));
+  };
+
+  var _successLog = function (request) {
+    console.log([request, ' successful!'].join(''));
+  };
+
+  var _warnLog = function (request) {
+    console.log([request, ' failed!'].join(''));
   };
 
   var all = function() {
+    _initiatingLog('GET INDEX');
     return $.ajax({
-      url: _buildURL(),
+      url: _buildURL(PUPPIES),
       type: 'GET',
       dataType: 'json',
       success: function (json) {
+        _successLog('GET INDEX');
         return json;
       }
     });
   };
 
-  // var create = function(name, breed) {
-  //   return $.ajax({
-  //     url: _buildURL(),
-  //     type: 'POST',
-  //     dataType: 'json',
-  //     data: {
-  //       name: ,
-  //       breed_id:
-  //     }
-  //   });
-  // };
+  var create = function(name, breed) {
+    _initiatingLog('POST CREATE');
+    return $.ajax({
+      url: _buildURL(PUPPIES),
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        name: name,
+        breed_id: breed
+      },
+      success: function (response) {
+        _successLog('POST CREATE');
+        return response;
+      },
+      error: function (response) {
+        _warnLog('POST CREATE');
+        return response;
+      }
+    });
+  };
+
+  var breeds = function() {
+    return $.ajax({
+      url: _buildURL(BREEDS),
+      type: 'GET',
+      dataType: 'json',
+      success: function (json) {
+        _successLog('GET BREEDS');
+        return json;
+      },
+      error: function (response) {
+        _warnLog('GET BREEDS');
+        return response;
+      }
+    });
+  };
 
   return {
-    all: all
+    all: all,
+    breeds: breeds
   };
 
 })(_);

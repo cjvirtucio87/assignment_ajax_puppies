@@ -5,18 +5,29 @@ APP.View = (function($,_) {
   var init = function() {
     _cacheDOM();
     _listenIndex();
+    // _listenCreate();
   };
 
   var _cacheDOM = function() {
     _$index = $('ul#puppies-index');
     _$indexRefresh = $('a#puppies-index-refresh');
     _$alerts = $('div#alerts');
+    _$newForm = $('form#puppies-new');
+    _$newName = _$newForm.children('input#name');
+    _$breed = _$newForm.children('select#breed');
+    _$submit = _$newForm.children('input#submit');
   };
 
+  // Listeners
   var _listenIndex = function () {
-    _$indexRefresh.on('click',APP.eventHandlers.loadIndex);
+    _$indexRefresh.on('click',APP.eventHandlers.getIndex);
   };
 
+  var _listenCreate = function () {
+    _$submit.on('click',APP.eventHandlers.postCreate);
+  };
+
+  // Notifications
   var _waiting = function() {
     _$alerts.empty();
     _$alerts.removeClass();
@@ -41,6 +52,19 @@ APP.View = (function($,_) {
     _$alerts.addClass('alert alert-danger').append("<p>Failure :(</p>");
   };
 
+  // Console logging
+  var _successLog = function (resource) {
+    return function () {
+      console.log(['Loaded ',resource, '!'].join(''));
+    };
+  };
+
+  var _warnLog = function (resource) {
+    return function () {
+      console.log(['Failed to load ',resource, '!'].join(''));
+    };
+  };
+
   var index = function(promise) {
     _waiting();
     promise.then(
@@ -55,9 +79,27 @@ APP.View = (function($,_) {
     );
   };
 
+  var create = function() {
+    return {name: _$newName.val(), breed: _$breed.val()};
+  };
+
+  var breeds = function(promise) {
+    promise.then(
+      function(data) {
+        _.forEach(data, function(item) {
+          _$breed.append(['<option>',item.name,'</option>'].join(''));
+        });
+        _successLog('breeds')();
+      },
+      _warnLog('breeds')
+    );
+  };
+
   return {
     init: init,
-    index: index
+    index: index,
+    create: create,
+    breeds: breeds
   };
 
 })($,_);
