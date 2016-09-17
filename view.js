@@ -6,6 +6,7 @@ APP.View = (function($,_) {
     _cacheDOM();
     _listenIndex();
     _listenCreate();
+    _listenDestroy();
   };
 
   var _cacheDOM = function() {
@@ -25,6 +26,10 @@ APP.View = (function($,_) {
 
   var _listenCreate = function () {
     _$submit.on('click',APP.eventHandlers.postCreate);
+  };
+
+  var _listenDestroy = function () {
+    _$index.on('click','a.puppy-adopt',APP.eventHandlers.postDestroy);
   };
 
   // Notifications
@@ -74,7 +79,7 @@ APP.View = (function($,_) {
         _.forEachRight(data, function(item) {
           var _puppy = [item.name," (",item.breed.name,") ","created at ", jQuery.timeago(item.created_at)].join('');
           // adding adopt button
-          _adopt = ["-- <span><a href='#' data-puppy-id=\'",item.id,"\'>",'adopt',"</a></span>"].join('');
+          _adopt = [" --- <span><a href='#' class='puppy-adopt' data-puppy-id=\'",item.id,"\'>",'adopt',"</a></span>"].join('');
           _puppyLI = ["<li class='puppies-index-item'>",_puppy,_adopt,'</li>'].join('');
           _$index.append(_puppyLI);
         });
@@ -92,7 +97,19 @@ APP.View = (function($,_) {
                         .attr('data-breed-id')};
   };
 
+  var destroy = function() {
+    _waiting();
+  };
+
+  // Responses for POST requests.
   var createResponse = function(promise) {
+    promise.then(
+      _success,
+      _failure
+    );
+  };
+
+  var destroyResponse = function(promise) {
     promise.then(
       _success,
       _failure
@@ -116,8 +133,10 @@ APP.View = (function($,_) {
     init: init,
     index: index,
     create: create,
+    destroy: destroy,
     breeds: breeds,
-    createResponse: createResponse
+    createResponse: createResponse,
+    destroyResponse: destroyResponse
   };
 
 })($,_);

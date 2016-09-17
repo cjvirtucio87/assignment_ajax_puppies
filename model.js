@@ -65,6 +65,26 @@ APP.Model = (function (_) {
     });
   };
 
+  var destroy = function(puppyID) {
+    _initiatingLog('POST DESTROY');
+    return $.ajax({
+      url: _buildURL(['puppies/',puppyID,'.json'].join('')),
+      type: 'POST',
+      dataType: 'json',
+      data: JSON.stringify({_method: 'delete'}),
+      contentType: 'application/json',
+      success: function (response) {
+        _successLog('POST CREATE');
+      },
+      error: function (response) {
+        _warnLog('POST CREATE');
+      },
+      complete: function (response) {
+        console.log(response);
+      }
+    });
+  };
+
   var breeds = function() {
     return $.ajax({
       url: _buildURL(BREEDS),
@@ -84,7 +104,8 @@ APP.Model = (function (_) {
   return {
     all: all,
     breeds: breeds,
-    create: create
+    create: create,
+    destroy: destroy
   };
 
 })(_);

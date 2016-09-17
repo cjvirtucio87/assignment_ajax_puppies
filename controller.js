@@ -21,9 +21,9 @@ APP.Controller = (function (model,view) {
     view.createResponse(responsePromise);
   };
 
-  var destroy = function() {
-    var puppy = view.destroy();
-    var responsePromise = model.destroy(puppy);
+  var destroy = function(puppyID) {
+    view.destroy();
+    var responsePromise = model.destroy(puppyID);
     view.destroyResponse(responsePromise);
   };
 
@@ -35,7 +35,8 @@ APP.Controller = (function (model,view) {
   return {
     init: init,
     index: index,
-    create: create
+    create: create,
+    destroy: destroy
   };
 
 })(APP.Model, APP.View);
