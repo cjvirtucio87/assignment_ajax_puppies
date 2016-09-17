@@ -12,7 +12,6 @@ APP.Model = (function (_) {
   };
 
   var all = function() {
-    alert("Attempting GET request..");
     return $.ajax({
       url: _buildURL(),
       type: 'GET',
@@ -20,16 +19,7 @@ APP.Model = (function (_) {
       success: function (json) {
         return json;
       }
-    }).then(
-      function(data) {
-        alert("GET Request successful");
-        return data;
-      },
-      function(data) {
-        alert("GET Request failed");
-        return data;
-      }
-    );
+    });
   };
 
   return {
