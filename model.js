@@ -45,17 +45,15 @@ APP.Model = (function (_) {
 
   var create = function(puppy) {
     _initiatingLog('POST CREATE');
-    return $.ajax({
+    $.ajax({
       url: _buildURL(PUPPIES),
       type: 'POST',
       dataType: 'json',
-      data: {
-        name: puppy.name,
-        breed_id: puppy.breed
-      },
+      data: JSON.stringify(puppy),
+      contentType: 'application/json',
       success: function (response) {
         _successLog('POST CREATE');
-        return response;
+        console.log(response);
       },
       error: function (response) {
         _warnLog('POST CREATE');

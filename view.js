@@ -81,10 +81,9 @@ APP.View = (function($,_) {
 
   var create = function() {
     return {name: _$newName.val(),
-            breed: _$breed.val(),
-            id: _$breed
-                  .children('option:selected')
-                  .attr('data-breed-id')};
+            breed_id: _$breed
+                        .children('option:selected')
+                        .attr('data-breed-id')};
   };
 
   var breeds = function(promise) {
