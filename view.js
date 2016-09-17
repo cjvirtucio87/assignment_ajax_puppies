@@ -38,28 +38,39 @@ APP.View = (function($,_) {
   var _waiting = function() {
     _$alerts.empty();
     _$alerts.removeClass();
-    _$alerts.addClass('alert alert-info').append("<p>Waiting..</p>");
+    _$alerts.addClass('alert alert-info')
+            .append("<p>Waiting..</p>")
+            .show();
     waiting = setTimeout(_timeout,2001);
   };
 
   var _timeout = function() {
     _$alerts.empty();
     _$alerts.removeClass();
-    _$alerts.addClass('alert alert-warning').append("<p>Sorry this is taking forever.</p>");
+    _$alerts.addClass('alert alert-warning')
+            .append("<p>Sorry this is taking forever.</p>")
+            .show()
+            .fadeOut(1000);
   };
 
   var _success = function() {
     window.clearTimeout(waiting);
     _$alerts.empty();
     _$alerts.removeClass();
-    _$alerts.addClass('alert alert-success').append("<p>Success!</p>");
+    _$alerts.addClass('alert alert-success')
+            .append("<p>Success!</p>")
+            .show()
+            .fadeOut(2000);
   };
 
   var _failure = function() {
     window.clearTimeout(waiting);
     _$alerts.empty();
     _$alerts.removeClass();
-    _$alerts.addClass('alert alert-danger').append(["<p>Failure :( ", response.responseText,"</p>"].join(''));
+    _$alerts.addClass('alert alert-danger')
+            .append(["<p>Failure :( ", response.responseText,"</p>"].join(''))
+            .show()
+            .fadeOut(2000);
   };
 
   // Console logging
@@ -119,9 +130,9 @@ APP.View = (function($,_) {
   var createResponse = function(promise) {
     promise.then(
       function() {
-        _success();
         _prependPuppy(_cachedNewPuppy);
         _cachedNewPuppy = null;
+        _success();
       },
       _failure
     );
@@ -130,8 +141,8 @@ APP.View = (function($,_) {
   var destroyResponse = function(promise) {
     promise.then(
       function() {
-        _success();
         _$index.children.first().remove();
+        _success();
       },
       _failure
     );
