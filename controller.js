@@ -21,6 +21,12 @@ APP.Controller = (function (model,view) {
     view.createResponse(responsePromise);
   };
 
+  var destroy = function() {
+    var puppy = view.destroy();
+    var responsePromise = model.destroy(puppy);
+    view.destroyResponse(responsePromise);
+  };
+
   var breeds = function () {
     var breedsPromise = model.breeds();
     view.breeds(breedsPromise);

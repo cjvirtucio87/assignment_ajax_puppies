@@ -73,7 +73,10 @@ APP.View = (function($,_) {
       function (data) {
         _.forEachRight(data, function(item) {
           var _puppy = [item.name," (",item.breed.name,") ","created at ", jQuery.timeago(item.created_at)].join('');
-          _$index.append(["<li class='puppies-index-item'>",_puppy,'</li>'].join(''));
+          // adding adopt button
+          _adopt = ["-- <span><a href='#' data-puppy-id=\'",item.id,"\'>",'adopt',"</a></span>"].join('');
+          _puppyLI = ["<li class='puppies-index-item'>",_puppy,_adopt,'</li>'].join('');
+          _$index.append(_puppyLI);
         });
         _success();
       },
