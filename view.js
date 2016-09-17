@@ -123,7 +123,10 @@ APP.View = (function($,_) {
 
   var destroyResponse = function(promise) {
     promise.then(
-      _success,
+      function() {
+        _success();
+        _$index.children.first().remove();
+      },
       _failure
     );
   };
