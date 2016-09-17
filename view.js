@@ -70,8 +70,8 @@ APP.View = (function($,_) {
     promise.then(
       function (data) {
         _.forEach(data, function(item) {
-          var puppy = [item.name," (",item.breed.name,") ","created at ", jQuery.timeago(item.created_at)].join('');
-          _$index.append(["<li class='puppies-index-item'>",puppy,'</li>'].join(''));
+          var _puppy = [item.name," (",item.breed.name,") ","created at ", jQuery.timeago(item.created_at)].join('');
+          _$index.append(["<li class='puppies-index-item'>",_puppy,'</li>'].join(''));
         });
         _success();
       },
@@ -80,14 +80,19 @@ APP.View = (function($,_) {
   };
 
   var create = function() {
-    return {name: _$newName.val(), breed: _$breed.val()};
+    return {name: _$newName.val(),
+            breed: _$breed.val(),
+            id: _$breed
+                  .children('option:selected')
+                  .attr('data-breed-id')};
   };
 
   var breeds = function(promise) {
     promise.then(
       function(data) {
         _.forEach(data, function(item) {
-          _$breed.append(['<option>',item.name,'</option>'].join(''));
+          var _option = ["<option data-breed-id=\'",item.id,'\'>',item.name,'</option>'].join('');
+          _$breed.append(_option);
         });
         _successLog('breeds')();
       },

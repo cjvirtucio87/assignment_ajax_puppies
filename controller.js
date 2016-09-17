@@ -17,6 +17,7 @@ APP.Controller = (function (model,view) {
 
   var create = function() {
     var newPuppy = view.create();
+    debugger;
     model.create(newPuppy);
   };
 
