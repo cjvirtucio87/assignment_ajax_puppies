@@ -55,7 +55,8 @@ APP.View = (function($,_) {
     _$alerts.addClass('alert alert-success').append("<p>Success!</p>");
   };
 
-  var _failure = function(response,thing,othething) {
+  var _failure = function() {
+    window.clearTimeout(waiting);
     _$alerts.empty();
     _$alerts.removeClass();
     _$alerts.addClass('alert alert-danger').append(["<p>Failure :( ", response.responseText,"</p>"].join(''));
@@ -77,8 +78,12 @@ APP.View = (function($,_) {
   var _prependPuppy = function (item) {
     var _puppy = [item.name," (",item.breed.name,") ","created at ", jQuery.timeago(item.created_at)].join('');
     // adding adopt button
-    _adopt = [" --- <span><a href='#' class='puppy-adopt' data-puppy-id=\'",item.id,"\'>",'adopt',"</a></span>"].join('');
-    _puppyLI = ["<li class='puppies-index-item'>",_puppy,_adopt,'</li>'].join('');
+    _adopt = [" --- <span><a href='#' class='puppy-adopt' data-puppy-id=\'",
+              item.id,
+              "\'>",'adopt',"</a></span>"].join('');
+    _puppyLI = ["<li class='puppies-index-item'>",
+                _puppy,
+                _adopt,'</li>'].join('');
     _$index.prepend(_puppyLI);
   };
 
@@ -136,7 +141,9 @@ APP.View = (function($,_) {
     promise.then(
       function(data) {
         _.forEach(data, function(item) {
-          var _option = ["<option data-breed-id=\'",item.id,'\'>',item.name,'</option>'].join('');
+          var _option = ["<option data-breed-id=\'",
+                          item.id,'\'>',
+                          item.name,'</option>'].join('');
           _$breed.append(_option);
         });
         _successLog('breeds')();
