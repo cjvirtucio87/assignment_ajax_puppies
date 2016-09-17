@@ -32,6 +32,7 @@ APP.View = (function($,_) {
     _$alerts.empty();
     _$alerts.removeClass();
     _$alerts.addClass('alert alert-info').append("<p>Waiting..</p>");
+    waiting = setTimeout(_timeout,2001);
   };
 
   var _timeout = function() {
@@ -41,6 +42,7 @@ APP.View = (function($,_) {
   };
 
   var _success = function() {
+    window.clearTimeout(waiting);
     _$alerts.empty();
     _$alerts.removeClass();
     _$alerts.addClass('alert alert-success').append("<p>Success!</p>");
