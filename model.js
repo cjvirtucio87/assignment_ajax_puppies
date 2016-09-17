@@ -35,6 +35,10 @@ APP.Model = (function (_) {
       success: function (json) {
         _successLog('GET INDEX');
         return json;
+      },
+      error: function (response) {
+        _warnLog('GET INDEX');
+        console.log(response);
       }
     });
   };
@@ -55,7 +59,7 @@ APP.Model = (function (_) {
       },
       error: function (response) {
         _warnLog('POST CREATE');
-        return response;
+        console.log(response);
       }
     });
   };
@@ -71,7 +75,7 @@ APP.Model = (function (_) {
       },
       error: function (response) {
         _warnLog('GET BREEDS');
-        return response;
+        console.log(response);
       }
     });
   };
