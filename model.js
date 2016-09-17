@@ -38,6 +38,8 @@ APP.Model = (function (_) {
       },
       error: function (response) {
         _warnLog('GET INDEX');
+      },
+      complete: function (response) {
         console.log(response);
       }
     });
@@ -45,7 +47,7 @@ APP.Model = (function (_) {
 
   var create = function(puppy) {
     _initiatingLog('POST CREATE');
-    $.ajax({
+    return $.ajax({
       url: _buildURL(PUPPIES),
       type: 'POST',
       dataType: 'json',
@@ -53,10 +55,11 @@ APP.Model = (function (_) {
       contentType: 'application/json',
       success: function (response) {
         _successLog('POST CREATE');
-        console.log(response);
       },
       error: function (response) {
         _warnLog('POST CREATE');
+      },
+      complete: function (response) {
         console.log(response);
       }
     });

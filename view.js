@@ -80,10 +80,18 @@ APP.View = (function($,_) {
   };
 
   var create = function() {
+    _waiting();
     return {name: _$newName.val(),
             breed_id: _$breed
                         .children('option:selected')
                         .attr('data-breed-id')};
+  };
+
+  var createResponse = function(promise) {
+    promise.then(
+      _success,
+      _failure
+    );
   };
 
   var breeds = function(promise) {
@@ -103,7 +111,8 @@ APP.View = (function($,_) {
     init: init,
     index: index,
     create: create,
-    breeds: breeds
+    breeds: breeds,
+    createResponse: createResponse
   };
 
 })($,_);
