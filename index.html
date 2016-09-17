@@ -25,10 +25,14 @@
   integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
   crossorigin="anonymous"></script>
 
+  <!-- lodash -->
+  <script src="https://cdn.jsdelivr.net/lodash/4.15.0/lodash.min.js"></script>
+
   <!-- app -->
+  <script src='eventHandlers.js'></script>
   <script src='model.js'></script>
-  <script src='controller.js'></script>
   <script src='view.js'></script>
+  <script src='controller.js'></script>
 </head>
 <body>
   <div class='container'>
@@ -36,20 +40,27 @@
       <div class='col-md-6 col-md-offset-3'>
         <h1>The Ajax Puppy Shelter</h1>
         <h2>Register a new puppy</h2>
-        <form>
+        <form id='puppies-new'>
           <label>Name</label><br>
-          <input type='text' name='puppy-name'>
+          <input type='text' name='puppy-new-name'><br>
           <label>Breed</label><br>
-          <select name='puppy-breed'>
+          <select name='puppy-new-breed'>
           </select></br>
-          <input type='submit' name='puppy-submit' value='REGISTER PUPPY'>
+          <input type='submit' name='puppy-new-submit' value='REGISTER PUPPY'>
         </form>
         <h2>Our puppies:</h2>
-        <a>Refresh puppies list</a>
-        <ul>
+        <a id='puppies-index-refresh'>Refresh puppies list</a>
+        <ul id='puppies-index'>
         </ul>
       </div>
     </div>
   </div>
 </body>
+
+  <script>
+      $(document).ready(function() {
+        APP.Controller.init();
+      });
+  </script>
+
 </html>
