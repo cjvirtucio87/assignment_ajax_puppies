@@ -55,10 +55,10 @@ APP.View = (function($,_) {
     _$alerts.addClass('alert alert-success').append("<p>Success!</p>");
   };
 
-  var _failure = function() {
+  var _failure = function(response,thing,othething) {
     _$alerts.empty();
     _$alerts.removeClass();
-    _$alerts.addClass('alert alert-danger').append("<p>Failure :(</p>");
+    _$alerts.addClass('alert alert-danger').append(["<p>Failure :( ", response.responseText,"</p>"].join(''));
   };
 
   // Console logging
@@ -95,6 +95,7 @@ APP.View = (function($,_) {
     );
   };
 
+  // Cache new puppy info and return just the name and id for POST request.
   var create = function() {
     _waiting();
     _$selected = _$breed.children('option:selected');

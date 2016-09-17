@@ -38,9 +38,7 @@ APP.Model = (function (_) {
       },
       error: function (response) {
         _warnLog('GET INDEX');
-      },
-      complete: function (response) {
-        console.log(response);
+        return response;
       }
     });
   };
@@ -58,9 +56,7 @@ APP.Model = (function (_) {
       },
       error: function (response) {
         _warnLog('POST CREATE');
-      },
-      complete: function (response) {
-        console.log(response);
+        return response;
       }
     });
   };
@@ -78,9 +74,7 @@ APP.Model = (function (_) {
       },
       error: function (response) {
         _warnLog('POST CREATE');
-      },
-      complete: function (response) {
-        console.log(response);
+        return response;
       }
     });
   };
@@ -96,7 +90,7 @@ APP.Model = (function (_) {
       },
       error: function (response) {
         _warnLog('GET BREEDS');
-        console.log(response);
+        return response;
       }
     });
   };
