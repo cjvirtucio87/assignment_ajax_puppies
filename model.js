@@ -43,15 +43,15 @@ APP.Model = (function (_) {
     });
   };
 
-  var create = function(name, breed) {
+  var create = function(puppy) {
     _initiatingLog('POST CREATE');
     return $.ajax({
       url: _buildURL(PUPPIES),
       type: 'POST',
       dataType: 'json',
       data: {
-        name: name,
-        breed_id: breed
+        name: puppy.name,
+        breed_id: puppy.breed
       },
       success: function (response) {
         _successLog('POST CREATE');
@@ -82,7 +82,8 @@ APP.Model = (function (_) {
 
   return {
     all: all,
-    breeds: breeds
+    breeds: breeds,
+    create: create
   };
 
 })(_);

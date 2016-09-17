@@ -5,7 +5,7 @@ APP.View = (function($,_) {
   var init = function() {
     _cacheDOM();
     _listenIndex();
-    // _listenCreate();
+    _listenCreate();
   };
 
   var _cacheDOM = function() {
