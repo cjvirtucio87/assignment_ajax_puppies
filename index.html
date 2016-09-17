@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <!-- jquery -->
+  <script
+  src="https://code.jquery.com/jquery-3.1.0.min.js"
+  integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
+  crossorigin="anonymous"></script>
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+  integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+  crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+  integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+  crossorigin="anonymous">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+  integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+  crossorigin="anonymous"></script>
+
+  <!-- app -->
+  <script src='model.js'></script>
+  <script src='controller.js'></script>
+  <script src='view.js'></script>
+</head>
+<body>
+  <div class='container'>
+    <div class='row'>
+      <div class='col-md-6 col-md-offset-3'>
+        <h1>The Ajax Puppy Shelter</h1>
+        <h2>Register a new puppy</h2>
+        <form>
+          <label>Name</label><br>
+          <input type='text' name='puppy-name'>
+          <label>Breed</label><br>
+          <select name='puppy-breed'>
+          </select></br>
+          <input type='submit' name='puppy-submit' value='REGISTER PUPPY'>
+        </form>
+        <h2>Our puppies:</h2>
+        <a>Refresh puppies list</a>
+        <ul>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
