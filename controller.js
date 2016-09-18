@@ -22,10 +22,11 @@ APP.Controller = (function (model,view) {
         .then(view.show);
   };
 
-  var destroy = function(puppyID) {
-    view.destroy();
-    var responsePromise = model.destroy(puppyID);
-    view.destroyResponse(responsePromise);
+  var destroy = function() {
+    view.notifications.waiting();
+    view.destroy()
+        .then(model.destroy, view.notifications.failure)
+        .then(view.remove);
   };
 
   var breeds = function () {

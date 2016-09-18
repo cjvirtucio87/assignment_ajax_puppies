@@ -107,6 +107,7 @@ APP.View = (function($,_,eventHandlers) {
   };
 
   var destroy = function() {
+    return Promise.resolve(puppyID);
   };
 
   var show = function() {
@@ -115,14 +116,9 @@ APP.View = (function($,_,eventHandlers) {
     notifications.success();
   };
 
-  var destroyResponse = function(promise) {
-    promise.then(
-      function() {
-        _$index.children.first().remove();
-        _success();
-      },
-      _failure
-    );
+  var remove = function() {
+    _$index.children.first().remove();
+    _success();
   };
 
   var breeds = function(data) {
@@ -142,7 +138,7 @@ APP.View = (function($,_,eventHandlers) {
     show: show,
     destroy: destroy,
     breeds: breeds,
-    destroyResponse: destroyResponse,
+    remove: remove,
     notifications: notifications,
     loggers: loggers
   };
