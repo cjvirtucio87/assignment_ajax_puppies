@@ -72,7 +72,12 @@ APP.View = (function($,_,eventHandlers) {
   };
 
   var _prependPuppy = function (item) {
-    var _puppy = [item.name," (",item.breed.name,") ","created at ", jQuery.timeago(item.created_at)].join('');
+    var _puppy = [item.name,
+                  " (",
+                  item.breed.name,
+                  ") ",
+                  "created at ",
+                  jQuery.timeago(item.created_at)].join('');
     // adding adopt button
     _adopt = [" --- <span><a href='#' class='puppy-adopt' data-puppy-id=\'",
               item.id,
