@@ -11,14 +11,15 @@ APP.Controller = (function (model,view) {
   };
 
   var index = function() {
-    var puppiesPromise = model.all();
-    view.index(puppiesPromise);
+    view.notifications.waiting();
+    model.all().then(view.index, view.notifications.failure);
   };
 
   var create = function() {
-    var newPuppy = view.create();
-    var responsePromise = model.create(newPuppy);
-    view.createResponse(responsePromise);
+    view.notifications.waiting();
+    view.create()
+        .then(model.create, view.notifications.failure)
+        .then(view.show);
   };
 
   var destroy = function(puppyID) {

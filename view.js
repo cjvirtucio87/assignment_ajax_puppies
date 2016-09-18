@@ -1,8 +1,9 @@
 var APP = APP || {};
 
-APP.View = (function($,_) {
+APP.View = (function($,_,eventHandlers) {
   var _cachedNewPuppy;
   var _$selected;
+  var _waiting;
 
   var init = function() {
     _cacheDOM();
@@ -23,54 +24,37 @@ APP.View = (function($,_) {
 
   // Listeners
   var _listenIndex = function () {
-    _$indexRefresh.on('click',APP.eventHandlers.getIndex);
+    _$indexRefresh.on('click',eventHandlers.getIndex);
   };
 
   var _listenCreate = function () {
-    _$submit.on('click',APP.eventHandlers.postCreate);
+    _$submit.on('click',eventHandlers.postCreate);
   };
 
   var _listenDestroy = function () {
-    _$index.on('click','a.puppy-adopt',APP.eventHandlers.postDestroy);
+    _$index.on('click','a.puppy-adopt',eventHandlers.postDestroy);
   };
 
-  // Notifications
-  var _waiting = function() {
-    _$alerts.empty();
-    _$alerts.removeClass();
-    _$alerts.addClass('alert alert-info')
-            .append("<p>Waiting..</p>")
-            .show();
-    waiting = setTimeout(_timeout,2001);
+  var _notify = function(noticeType, message) {
+    return function(response) {
+      window.clearTimeout(_waiting);
+      if (noticeType === 'info') {
+        _waiting = setTimeout(notifications.timeout,2001);
+      }
+      _$alerts.empty();
+      _$alerts.removeClass();
+      _$alerts.addClass(['alert alert-',noticeType].join(''))
+              .append(["<p>",message,"</p>"].join(''))
+              .show()
+              .fadeOut(5000);
+    };
   };
 
-  var _timeout = function() {
-    _$alerts.empty();
-    _$alerts.removeClass();
-    _$alerts.addClass('alert alert-warning')
-            .append("<p>Sorry this is taking forever.</p>")
-            .show()
-            .fadeOut(1000);
-  };
-
-  var _success = function() {
-    window.clearTimeout(waiting);
-    _$alerts.empty();
-    _$alerts.removeClass();
-    _$alerts.addClass('alert alert-success')
-            .append("<p>Success!</p>")
-            .show()
-            .fadeOut(2000);
-  };
-
-  var _failure = function() {
-    window.clearTimeout(waiting);
-    _$alerts.empty();
-    _$alerts.removeClass();
-    _$alerts.addClass('alert alert-danger')
-            .append(["<p>Failure :( ", response.responseText,"</p>"].join(''))
-            .show()
-            .fadeOut(2000);
+  var notifications = {
+    success: _notify('success', 'Success!'),
+    failure: _notify('danger', 'Failure :('),
+    timeout: _notify('warning', 'Sorry this is taking forever.'),
+    waiting: _notify('info', 'Waiting..')
   };
 
   // Console logging
@@ -98,44 +82,32 @@ APP.View = (function($,_) {
     _$index.prepend(_puppyLI);
   };
 
-  var index = function(promise) {
-    _waiting();
-    promise.then(
-      function (data) {
-        _.forEach(data, function(item) {
-          _prependPuppy(item);
-        });
-        _success();
-      },
-      _failure
-    );
+  var index = function (data) {
+    notifications.success();
+    _.forEach(data, function(item) {
+      _prependPuppy(item);
+    });
   };
 
   // Cache new puppy info and return just the name and id for POST request.
   var create = function() {
-    _waiting();
     _$selected = _$breed.children('option:selected');
     _cachedNewPuppy = {name: _$newName.val(),
                        breed: {name: _$selected.text()},
                        breed_id: _$selected.attr('data-breed-id'),
                        created_at: new Date()};
-    return { name: _cachedNewPuppy.name, breed_id: _cachedNewPuppy.breed_id };
+    return Promise.resolve({ name: _cachedNewPuppy.name,
+                             breed_id: _cachedNewPuppy.breed_id });
   };
 
   var destroy = function() {
-    _waiting();
   };
 
   // Responses for POST requests.
-  var createResponse = function(promise) {
-    promise.then(
-      function() {
-        _prependPuppy(_cachedNewPuppy);
-        _cachedNewPuppy = null;
-        _success();
-      },
-      _failure
-    );
+  var show = function() {
+    _prependPuppy(_cachedNewPuppy);
+    _cachedNewPuppy = null;
+    notifications.success();
   };
 
   var destroyResponse = function(promise) {
@@ -169,8 +141,9 @@ APP.View = (function($,_) {
     create: create,
     destroy: destroy,
     breeds: breeds,
-    createResponse: createResponse,
-    destroyResponse: destroyResponse
+    show: show,
+    destroyResponse: destroyResponse,
+    notifications: notifications
   };
 
-})($,_);
+})($,_,APP.eventHandlers);
