@@ -7,9 +7,9 @@ APP.View = (function($,_,eventHandlers) {
 
   var init = function() {
     _cacheDOM();
-    _listenIndex();
-    _listenCreate();
-    _listenDestroy();
+    _listeners.index();
+    _listeners.create();
+    _listeners.destroy();
   };
 
   var _cacheDOM = function() {
@@ -23,16 +23,16 @@ APP.View = (function($,_,eventHandlers) {
   };
 
   // Listeners
-  var _listenIndex = function () {
-    _$indexRefresh.on('click',eventHandlers.getIndex);
-  };
-
-  var _listenCreate = function () {
-    _$submit.on('click',eventHandlers.postCreate);
-  };
-
-  var _listenDestroy = function () {
-    _$index.on('click','a.puppy-adopt',eventHandlers.postDestroy);
+  var _listeners = {
+    index: function () {
+      _$indexRefresh.on('click',eventHandlers.getIndex);
+    },
+    create: function () {
+      _$submit.on('click',eventHandlers.postCreate);
+    },
+    destroy: function () {
+      _$index.on('click','a.puppy-adopt',eventHandlers.postDestroy);
+    }
   };
 
   var _notify = function(noticeType, message) {
@@ -41,12 +41,21 @@ APP.View = (function($,_,eventHandlers) {
       if (noticeType === 'info') {
         _waiting = setTimeout(notifications.timeout,2001);
       }
-      _$alerts.empty();
-      _$alerts.removeClass();
-      _$alerts.addClass(['alert alert-',noticeType].join(''))
+      _$alerts.stop(true,true)
+              .empty()
+              .removeClass()
+              .addClass(['alert alert-',noticeType].join(''))
               .append(["<p>",message,"</p>"].join(''))
               .show()
-              .fadeOut(5000);
+              .fadeOut(2000);
+    };
+  };
+
+  var _log = function (message) {
+    return function (resource) {
+      return function () {
+        console.log([message,resource, '!'].join(''));
+      };
     };
   };
 
@@ -57,17 +66,9 @@ APP.View = (function($,_,eventHandlers) {
     waiting: _notify('info', 'Waiting..')
   };
 
-  // Console logging
-  var _successLog = function (resource) {
-    return function () {
-      console.log(['Loaded ',resource, '!'].join(''));
-    };
-  };
-
-  var _warnLog = function (resource) {
-    return function () {
-      console.log(['Failed to load ',resource, '!'].join(''));
-    };
+  var loggers = {
+    success: _log('Loaded '),
+    failure: _log('Failed to load ')
   };
 
   var _prependPuppy = function (item) {
@@ -103,7 +104,6 @@ APP.View = (function($,_,eventHandlers) {
   var destroy = function() {
   };
 
-  // Responses for POST requests.
   var show = function() {
     _prependPuppy(_cachedNewPuppy);
     _cachedNewPuppy = null;
@@ -129,9 +129,9 @@ APP.View = (function($,_,eventHandlers) {
                           item.name,'</option>'].join('');
           _$breed.append(_option);
         });
-        _successLog('breeds')();
+        loggers.success('breeds')();
       },
-      _warnLog('breeds')
+      loggers.failure('breeds')
     );
   };
 
@@ -139,11 +139,12 @@ APP.View = (function($,_,eventHandlers) {
     init: init,
     index: index,
     create: create,
+    show: show,
     destroy: destroy,
     breeds: breeds,
-    show: show,
     destroyResponse: destroyResponse,
-    notifications: notifications
+    notifications: notifications,
+    loggers: loggers
   };
 
 })($,_,APP.eventHandlers);
