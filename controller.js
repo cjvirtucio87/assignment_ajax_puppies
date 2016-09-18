@@ -29,8 +29,7 @@ APP.Controller = (function (model,view) {
   };
 
   var breeds = function () {
-    var breedsPromise = model.breeds();
-    view.breeds(breedsPromise);
+    model.breeds().then(view.breeds, view.notifications.failure);
   };
 
   return {

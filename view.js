@@ -125,19 +125,14 @@ APP.View = (function($,_,eventHandlers) {
     );
   };
 
-  var breeds = function(promise) {
-    promise.then(
-      function(data) {
-        _.forEach(data, function(item) {
-          var _option = ["<option data-breed-id=\'",
-                          item.id,'\'>',
-                          item.name,'</option>'].join('');
-          _$breed.append(_option);
-        });
-        loggers.success('breeds')();
-      },
-      loggers.failure('breeds')
-    );
+  var breeds = function(data) {
+    _.forEach(data, function(item) {
+      var _option = ["<option data-breed-id=\'",
+                      item.id,'\'>',
+                      item.name,'</option>'].join('');
+      _$breed.append(_option);
+    });
+    loggers.success('breeds')();
   };
 
   return {
