@@ -126,7 +126,7 @@ APP.View = (function($,_,eventHandlers) {
   var show = function(promises) {
     Promise.all(promises)
            .then(function(promises) {
-              promises.forEach(function(promise) {
+              _.forEach(promises, function(promise) {
                 _prependPuppy(promise);
               });
               notifications.success();
