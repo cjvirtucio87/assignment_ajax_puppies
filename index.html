@@ -48,11 +48,17 @@
         <h2>Register a new puppy</h2>
         <form id='puppies-new'>
           <label>Name</label><br>
-          <input type='text' id='name' name='puppy-new-name'><br>
+          <input type='text' id='puppy-new-name' name='puppy-new-name'><br>
           <label>Breed</label><br>
           <select id='breed' name='puppy-new-breed'>
           </select></br>
-          <input id='submit' type='submit' name='puppy-new-submit' value='REGISTER PUPPY'>
+          <input id='puppy-new-submit' type='submit' name='puppy-new-submit' value='REGISTER PUPPY'>
+        </form>
+
+        <form id='puppies-batch'>
+          <label>Batch upload</label><br>
+          <input type='file' id='puppy-batch-file' name='puppy-batch-file'><br>
+          <input id='puppy-batch-submit' type='submit' name='puppy-batch-submit' value='BATCH UPLOAD'>
         </form>
         <h2>Our puppies:</h2>
         <a id='puppies-index-refresh' href='#'>Refresh puppies list</a>

@@ -18,8 +18,8 @@ APP.Controller = (function (model,view) {
   var create = function() {
     view.notifications.waiting();
     view.create()
-        .then(model.create, view.notifications.failure)
-        .then(view.show);
+        .then(model.create)
+        .then(view.show,view.notifications.failure);
   };
 
   var destroy = function() {
@@ -32,6 +32,21 @@ APP.Controller = (function (model,view) {
   var breeds = function () {
     model.breeds().then(view.breeds, view.notifications.failure);
   };
+
+  // var batchUpload = function (promises) {
+  //   var uploadingPromises = promises;
+  //   uploadingPromises.batch.map(function(puppy) {
+  //     return model.create(puppy);
+  //   });
+  //   Promise.all(promises)
+  //     .catch(function(err) {
+  //       promises.rejectCount++;
+  //       return promises;
+  //     })
+  //     .then(function(promises) {
+  //
+  //     });
+  // };
 
   return {
     init: init,

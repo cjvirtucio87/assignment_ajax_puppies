@@ -49,14 +49,16 @@ APP.Model = (function (_) {
       url: _buildURL(PUPPIES),
       type: 'POST',
       dataType: 'json',
-      data: JSON.stringify(puppy),
+      data: JSON.stringify({name: puppy.name,
+                            breed_id: puppy.breed_id}),
       contentType: 'application/json',
       success: function (response) {
         _successLog('POST CREATE');
+        return Promise.resolve(response);
       },
       error: function (response) {
         _warnLog('POST CREATE');
-        return response;
+        return Promise.reject(response);
       }
     });
   };

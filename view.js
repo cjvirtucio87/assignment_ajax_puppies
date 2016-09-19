@@ -1,15 +1,17 @@
 var APP = APP || {};
 
 APP.View = (function($,_,eventHandlers) {
-  var _cachedNewPuppy;
+  var _cachedBreeds;
   var _$selected;
   var _waiting;
+  var _batchPuppies = [];
 
   var init = function() {
     _cacheDOM();
     _listeners.index();
     _listeners.create();
     _listeners.destroy();
+    _listeners.batch();
   };
 
   var _cacheDOM = function() {
@@ -17,9 +19,11 @@ APP.View = (function($,_,eventHandlers) {
     _$indexRefresh = $('a#puppies-index-refresh');
     _$alerts = $('div#alerts');
     _$newForm = $('form#puppies-new');
-    _$newName = _$newForm.children('input#name');
+    _$newName = _$newForm.children('input#puppy-new-name');
     _$breed = _$newForm.children('select#breed');
-    _$submit = _$newForm.children('input#submit');
+    _$newSubmit = _$newForm.children('input#puppy-new-submit');
+    _$batchForm = $('form#puppies-batch');
+    _$batchFile = _$batchForm.children('input#puppy-batch-file');
   };
 
   // Listeners
@@ -28,15 +32,18 @@ APP.View = (function($,_,eventHandlers) {
       _$indexRefresh.on('click',eventHandlers.getIndex);
     },
     create: function () {
-      _$submit.on('click',eventHandlers.postCreate);
+      _$newSubmit.on('click',eventHandlers.postCreate);
     },
     destroy: function () {
       _$index.on('click','a.puppy-adopt',eventHandlers.postDestroy);
+    },
+    batch: function () {
+      _$batchFile.on('change', eventHandlers.batchCache(_batchPuppies));
     }
   };
 
   var _notify = function(noticeType, message) {
-    return function(response) {
+    return function(data) {
       window.clearTimeout(_waiting);
       if (noticeType === 'info') {
         _waiting = setTimeout(notifications.timeout,2001);
@@ -72,9 +79,12 @@ APP.View = (function($,_,eventHandlers) {
   };
 
   var _prependPuppy = function (item) {
+    var breedName = item.breed ? item.breed.name : _.find(_cachedBreeds, function(breed) {
+      return item.breed_id === breed.id;
+    }).name;
     var _puppy = [item.name,
                   " (",
-                  item.breed.name,
+                  breedName,
                   ") ",
                   "created at ",
                   jQuery.timeago(item.created_at)].join('');
@@ -98,22 +108,19 @@ APP.View = (function($,_,eventHandlers) {
   // Cache new puppy info and return just the name and id for POST request.
   var create = function() {
     _$selected = _$breed.children('option:selected');
-    _cachedNewPuppy = {name: _$newName.val(),
-                       breed: {name: _$selected.text()},
-                       breed_id: _$selected.attr('data-breed-id'),
-                       created_at: new Date()};
-    return Promise.resolve({ name: _cachedNewPuppy.name,
-                             breed_id: _cachedNewPuppy.breed_id });
+    return Promise.resolve({name: _$newName.val(),
+                           breed: {name: _$selected.text()},
+                           breed_id: _$selected.attr('data-breed-id'),
+                           created_at: new Date()});
   };
 
   var destroy = function() {
     return Promise.resolve(puppyID);
   };
 
-  var show = function() {
-    _prependPuppy(_cachedNewPuppy);
-    _cachedNewPuppy = null;
-    notifications.success();
+  var show = function(data) {
+    console.log(data);
+    _prependPuppy(data);
   };
 
   var remove = function() {
@@ -122,6 +129,7 @@ APP.View = (function($,_,eventHandlers) {
   };
 
   var breeds = function(data) {
+    _cachedBreeds = data;
     _.forEach(data, function(item) {
       var _option = ["<option data-breed-id=\'",
                       item.id,'\'>',
@@ -129,6 +137,10 @@ APP.View = (function($,_,eventHandlers) {
       _$breed.append(_option);
     });
     loggers.success('breeds')();
+  };
+
+  var batchShow = function(promises) {
+
   };
 
   return {
