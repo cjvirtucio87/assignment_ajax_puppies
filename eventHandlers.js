@@ -44,6 +44,8 @@ APP.eventHandlers = {
       });
   },
   batchUpload: function(ev) {
+    ev.stopPropagation();
+    ev.preventDefault();
     APP.Controller.batchUpload(APP.View.getBatchPuppies().map(function(puppy) {
       return Promise.resolve(puppy);
     }));

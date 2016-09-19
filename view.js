@@ -123,16 +123,17 @@ APP.View = (function($,_,eventHandlers) {
   var show = function(promises) {
     Promise.all(promises)
            .then(function(promises) {
-             promises.forEach(function(promise) {
+              promises.forEach(function(promise) {
                 _prependPuppy(promise);
-                _success();
               });
+              notifications.success();
+              loggers.success('new puppy');
            });
   };
 
   var remove = function() {
     _$index.children.first().remove();
-    _success();
+    notifications.success();
   };
 
   var breeds = function(data) {
@@ -152,10 +153,6 @@ APP.View = (function($,_,eventHandlers) {
 
   var getBatchPuppies = function() {
     return _batchPuppies;
-  };
-
-  var batchShow = function(promises) {
-
   };
 
   return {
