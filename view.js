@@ -4,7 +4,7 @@ APP.View = (function($,_,eventHandlers) {
   var _cachedBreeds;
   var _$selected;
   var _waiting;
-  var _batchPuppies = [];
+  var _batchPuppies;
 
   var init = function() {
     _cacheDOM();
@@ -24,6 +24,7 @@ APP.View = (function($,_,eventHandlers) {
     _$newSubmit = _$newForm.children('input#puppy-new-submit');
     _$batchForm = $('form#puppies-batch');
     _$batchFile = _$batchForm.children('input#puppy-batch-file');
+    _$batchSubmit = _$batchForm.children('input#puppy-batch-submit');
   };
 
   // Listeners
@@ -38,7 +39,8 @@ APP.View = (function($,_,eventHandlers) {
       _$index.on('click','a.puppy-adopt',eventHandlers.postDestroy);
     },
     batch: function () {
-      _$batchFile.on('change', eventHandlers.batchCache(_batchPuppies));
+      _$batchFile.on('change', eventHandlers.batchCache);
+      _$batchSubmit.on('click', eventHandlers.batchUpload);
     }
   };
 
@@ -118,9 +120,14 @@ APP.View = (function($,_,eventHandlers) {
     return Promise.resolve(puppyID);
   };
 
-  var show = function(data) {
-    console.log(data);
-    _prependPuppy(data);
+  var show = function(promises) {
+    Promise.all(promises)
+           .then(function(promises) {
+             promises.forEach(function(promise) {
+                _prependPuppy(promise);
+                _success();
+              });
+           });
   };
 
   var remove = function() {
@@ -139,6 +146,14 @@ APP.View = (function($,_,eventHandlers) {
     loggers.success('breeds')();
   };
 
+  var setBatchPuppies = function(puppies) {
+    _batchPuppies = puppies;
+  };
+
+  var getBatchPuppies = function() {
+    return _batchPuppies;
+  };
+
   var batchShow = function(promises) {
 
   };
@@ -152,6 +167,8 @@ APP.View = (function($,_,eventHandlers) {
     breeds: breeds,
     remove: remove,
     notifications: notifications,
+    setBatchPuppies: setBatchPuppies,
+    getBatchPuppies: getBatchPuppies,
     loggers: loggers
   };
 

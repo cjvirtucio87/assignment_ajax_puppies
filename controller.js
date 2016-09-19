@@ -17,9 +17,8 @@ APP.Controller = (function (model,view) {
 
   var create = function() {
     view.notifications.waiting();
-    view.create()
-        .then(model.create)
-        .then(view.show,view.notifications.failure);
+    view.show([view.create()
+        .then(model.create)]);
   };
 
   var destroy = function() {
@@ -33,26 +32,18 @@ APP.Controller = (function (model,view) {
     model.breeds().then(view.breeds, view.notifications.failure);
   };
 
-  // var batchUpload = function (promises) {
-  //   var uploadingPromises = promises;
-  //   uploadingPromises.batch.map(function(puppy) {
-  //     return model.create(puppy);
-  //   });
-  //   Promise.all(promises)
-  //     .catch(function(err) {
-  //       promises.rejectCount++;
-  //       return promises;
-  //     })
-  //     .then(function(promises) {
-  //
-  //     });
-  // };
+  var batchUpload = function (promises) {
+    Promise.all(promises.map(function(promise) {
+      return promise.then(model.create);
+    })).then(view.show);
+  };
 
   return {
     init: init,
     index: index,
     create: create,
-    destroy: destroy
+    destroy: destroy,
+    batchUpload: batchUpload
   };
 
 })(APP.Model, APP.View);
