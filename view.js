@@ -30,10 +30,10 @@ APP.View = (function($,_,eventHandlers) {
   // Listeners
   var _listeners = {
     index: function () {
-      _$indexRefresh.on('click',eventHandlers.getIndex);
+      _$indexRefresh.on('click', eventHandlers.getIndex);
     },
     create: function () {
-      _$newSubmit.on('click',eventHandlers.postCreate);
+      _$newSubmit.on('click', eventHandlers.postCreate);
     },
     destroy: function () {
       _$index.on('click','a.puppy-adopt',eventHandlers.postDestroy);
@@ -81,23 +81,24 @@ APP.View = (function($,_,eventHandlers) {
   };
 
   var _prependPuppy = function (item) {
+    // Breed name from item or breed name from cached list.
     var breedName = item.breed ? item.breed.name : _.find(_cachedBreeds, function(breed) {
       return item.breed_id === breed.id;
     }).name;
-    var _puppy = [item.name,
+    var puppy = [item.name,
                   " (",
                   breedName,
                   ") ",
                   "created at ",
                   jQuery.timeago(item.created_at)].join('');
     // adding adopt button
-    _adopt = [" --- <span><a href='#' class='puppy-adopt' data-puppy-id=\'",
+    adopt = [" --- <span><a href='#' class='puppy-adopt' data-puppy-id=\'",
               item.id,
               "\'>",'adopt',"</a></span>"].join('');
-    _puppyLI = ["<li class='puppies-index-item'>",
-                _puppy,
-                _adopt,'</li>'].join('');
-    _$index.prepend(_puppyLI);
+    puppyLI = ["<li class='puppies-index-item'>",
+                puppy,
+                adopt,'</li>'].join('');
+    _$index.prepend(puppyLI);
   };
 
   var index = function (data) {
