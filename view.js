@@ -27,7 +27,6 @@ APP.View = (function($,_,eventHandlers) {
     _$batchSubmit = _$batchForm.children('input#puppy-batch-submit');
   };
 
-  // Listeners
   var _listeners = {
     index: function () {
       _$indexRefresh.on('click', eventHandlers.getIndex);
