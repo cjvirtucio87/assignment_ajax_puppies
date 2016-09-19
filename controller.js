@@ -33,6 +33,7 @@ APP.Controller = (function (model,view) {
   };
 
   var batchUpload = function (promises) {
+    view.notifications.waiting();
     Promise.all(promises.map(function(promise) {
       return promise.then(model.create);
     })).then(view.show);

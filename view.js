@@ -101,13 +101,14 @@ APP.View = (function($,_,eventHandlers) {
   };
 
   var index = function (data) {
-    notifications.success();
     _.forEach(data, function(item) {
       _prependPuppy(item);
     });
+    notifications.success();
   };
 
-  // Cache new puppy info and return just the name and id for POST request.
+  // Kickstart the promise chain with a resolved promise containing
+  // the new puppy data.
   var create = function() {
     _$selected = _$breed.children('option:selected');
     return Promise.resolve({name: _$newName.val(),
@@ -116,10 +117,12 @@ APP.View = (function($,_,eventHandlers) {
                            created_at: new Date()});
   };
 
+  // Destroy still untested.
   var destroy = function() {
     return Promise.resolve(puppyID);
   };
 
+  // Prepend each puppy promise when all of them resolve.
   var show = function(promises) {
     Promise.all(promises)
            .then(function(promises) {
@@ -136,6 +139,7 @@ APP.View = (function($,_,eventHandlers) {
     notifications.success();
   };
 
+  // Cache the breeds for later use (needed by _prependPuppy).
   var breeds = function(data) {
     _cachedBreeds = data;
     _.forEach(data, function(item) {
